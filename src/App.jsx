@@ -61,21 +61,30 @@ function App() {
   return (
     <TodoProvider
       value={{ todos, addTodo, updateTodo, deleteTodo, toggleComplete }}>
-      <div className="min-h-screen py-8 px-2 bg-gradient-to-br from-blue-400 via-purple-300 to-pink-200 font-sans transition-colors duration-500">
-        <div className="w-full max-w-2xl mx-auto shadow-2xl rounded-3xl px-6 py-6 text-gray-900 bg-white/90 backdrop-blur-md border border-white/40 drop-shadow-xl transition-all duration-500 hover:scale-[1.025]">
+      <div className="min-h-screen py-8 px-2 bg-gradient-to-br from-blue-400 via-purple-300 to-pink-200 font-sans transition-colors duration-500 relative">
+        <div
+          className="w-full max-w-2xl mx-auto shadow-2xl rounded-3xl px-6 py-6 text-gray-900 bg-white/90 backdrop-blur-md border border-white/40 drop-shadow-xl transition-all duration-500 hover:scale-[1.025]"
+          style={{ paddingBottom: "80px" }}>
           <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-8 mt-2 flex flex-col items-center gap-2">
             <span className="text-5xl animate-bounce">👋🗒️</span>
             <span>Make Your Day Productive!</span>
           </h1>
+          <div className="text-center text-base text-gray-500 italic mb-8">
+            "Create your own opportunities, one task at a time."
+            <br />
+            <span className="not-italic font-semibold text-gray-700">
+              said by @armaanrawat
+            </span>
+          </div>
           <div className="mb-6">
             <TodoForm />
           </div>
           <div className="flex flex-wrap gap-y-3 min-h-[60px]">
             {todos.length === 0 ? (
               <div className="w-full text-center text-2xl text-gray-500 py-12 flex flex-col items-center gap-2">
-                <span className="text-6xl">✨</span>
+                <span className="text-6xl">🎯</span>
                 <span className="font-semibold">
-                  Create your todo list for an effective day ahead!
+                  Create your TODO list for an effective day ahead!✨
                 </span>
               </div>
             ) : (
@@ -94,6 +103,12 @@ function App() {
           message={toast.message}
           onClose={() => setToast({ show: false, message: "" })}
         />
+        <footer className="w-full text-center text-gray-600 text-sm py-4 select-none bg-gray-100/80 border-t border-gray-200 absolute left-0 bottom-0">
+          <span>
+            &copy; {new Date().getFullYear()} All rights reserved. Published{" "}
+            {new Date().getFullYear()}.
+          </span>
+        </footer>
       </div>
     </TodoProvider>
   );
