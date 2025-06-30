@@ -3,9 +3,16 @@ import { TodoProvider } from "./contexts";
 import { useEffect } from "react";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
+import Toast from "./components/Toast";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [toast, setToast] = useState({ show: false, message: "" });
+
+  const showToast = (message) => {
+    setToast({ show: true, message });
+  };
+
   const addTodo = (todo) => {
     setTodos((prev) => [
       ...prev,
@@ -14,22 +21,30 @@ function App() {
         ...todo,
       },
     ]);
+    showToast("Task added!");
   };
 
   const updateTodo = (id, todo) => {
     setTodos((prev) => prev.map((item) => (item.id === id ? todo : item)));
+    showToast("Task updated!");
   };
 
   const deleteTodo = (id) => {
     setTodos((prev) => prev.filter((item) => item.id !== id));
+    showToast("Task deleted!");
   };
 
   const toggleComplete = (id) => {
-    setTodos((prev) =>
-      prev.map((item) =>
+    setTodos((prev) => {
+      const updated = prev.map((item) =>
         item.id === id ? { ...item, completed: !item.completed } : item
-      )
-    );
+      );
+      // If all tasks are completed after this toggle, show congrats
+      if (updated.length > 0 && updated.every((item) => item.completed)) {
+        showToast("Congratulations! All tasks completed!");
+      }
+      return updated;
+    });
   };
 
   useEffect(() => {
@@ -52,18 +67,27 @@ function App() {
             Manage Your Todos
           </h1>
           <div className="mb-4">
-            {/* Todo form goes here */}
             <TodoForm />
           </div>
-          <div className="flex flex-wrap gap-y-3">
-            {/*Loop and Add TodoItem here */}
-            {todos.map((todo) => (
-              <div key={todo.id} className="w-full">
-                <TodoItem todo={todo} />
+          <div className="flex flex-wrap gap-y-3 min-h-[60px]">
+            {todos.length === 0 ? (
+              <div className="w-full text-center text-lg text-gray-300 py-8">
+                create the todo list for effective day ahead
               </div>
-            ))}
+            ) : (
+              todos.map((todo) => (
+                <div key={todo.id} className="w-full">
+                  <TodoItem todo={todo} />
+                </div>
+              ))
+            )}
           </div>
         </div>
+        <Toast
+          show={toast.show}
+          message={toast.message}
+          onClose={() => setToast({ show: false, message: "" })}
+        />
       </div>
     </TodoProvider>
   );
