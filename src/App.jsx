@@ -9,8 +9,8 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [toast, setToast] = useState({ show: false, message: "" });
 
-  const showToast = (message) => {
-    setToast({ show: true, message });
+  const showToast = (message, emoji = "🎉") => {
+    setToast({ show: true, message: `${emoji} ${message}` });
   };
 
   const addTodo = (todo) => {
@@ -21,17 +21,17 @@ function App() {
         ...todo,
       },
     ]);
-    showToast("Task added!");
+    showToast("Task added!", "📝");
   };
 
   const updateTodo = (id, todo) => {
     setTodos((prev) => prev.map((item) => (item.id === id ? todo : item)));
-    showToast("Task updated!");
+    showToast("Task updated!", "✏️");
   };
 
   const deleteTodo = (id) => {
     setTodos((prev) => prev.filter((item) => item.id !== id));
-    showToast("Task deleted!");
+    showToast("Task deleted!", "🗑️");
   };
 
   const toggleComplete = (id) => {
@@ -41,7 +41,7 @@ function App() {
       );
       // If all tasks are completed after this toggle, show congrats
       if (updated.length > 0 && updated.every((item) => item.completed)) {
-        showToast("Congratulations! All tasks completed!");
+        showToast("Congratulations! All tasks completed!", "🏆");
       }
       return updated;
     });
@@ -61,22 +61,28 @@ function App() {
   return (
     <TodoProvider
       value={{ todos, addTodo, updateTodo, deleteTodo, toggleComplete }}>
-      <div className="bg-[#172842] min-h-screen py-8">
-        <div className="w-full max-w-2xl mx-auto shadow-md rounded-lg px-4 py-3 text-white">
-          <h1 className="text-2xl font-bold text-center mb-8 mt-2">
-            Manage Your Todos
+      <div className="min-h-screen py-8 px-2 bg-gradient-to-br from-blue-400 via-purple-300 to-pink-200 font-sans transition-colors duration-500">
+        <div className="w-full max-w-2xl mx-auto shadow-2xl rounded-3xl px-6 py-6 text-gray-900 bg-white/90 backdrop-blur-md border border-white/40 drop-shadow-xl transition-all duration-500 hover:scale-[1.025]">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-8 mt-2 flex flex-col items-center gap-2">
+            <span className="text-5xl animate-bounce">👋🗒️</span>
+            <span>Make Your Day Productive!</span>
           </h1>
-          <div className="mb-4">
+          <div className="mb-6">
             <TodoForm />
           </div>
           <div className="flex flex-wrap gap-y-3 min-h-[60px]">
             {todos.length === 0 ? (
-              <div className="w-full text-center text-lg text-gray-300 py-8">
-                create the todo list for effective day ahead
+              <div className="w-full text-center text-2xl text-gray-500 py-12 flex flex-col items-center gap-2">
+                <span className="text-6xl">✨</span>
+                <span className="font-semibold">
+                  Create your todo list for an effective day ahead!
+                </span>
               </div>
             ) : (
               todos.map((todo) => (
-                <div key={todo.id} className="w-full">
+                <div
+                  key={todo.id}
+                  className="w-full transition-all duration-300 transform hover:scale-[1.025]">
                   <TodoItem todo={todo} />
                 </div>
               ))
